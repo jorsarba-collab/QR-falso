@@ -1,0 +1,319 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouTube Security</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: #101010;
+    color: white;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 92%;
+    max-width: 650px;
+    text-align: center;
+}
+
+.logo {
+    color: red;
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+.logo span { color: white; }
+
+.screen {
+    background: #202020;
+    padding: 35px 20px;
+    border-radius: 15px;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 10px 40px #000;
+}
+
+h1 { font-size: 30px; }
+p { color: #ccc; line-height: 1.6; }
+
+.loader {
+    width: 85%;
+    height: 10px;
+    background: #444;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 20px;
+}
+
+.progress {
+    height: 100%;
+    width: 0%;
+    background: #ff3030;
+    transition: width .2s;
+}
+
+.hidden { display: none !important; }
+
+button {
+    background: #ff3030;
+    color: white;
+    border: none;
+    padding: 14px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.warning {
+    color: #ff3030;
+    font-size: 55px;
+}
+
+#count {
+    font-size: 75px;
+    color: #ff3030;
+    font-weight: bold;
+}
+
+#final {
+    border: 2px solid #ff3030;
+    background: #210d0d;
+}
+
+#final h1 {
+    color: #ff3030;
+    font-size: 42px;
+}
+
+#final .big {
+    font-size: 65px;
+}
+
+#final p {
+    color: white;
+    font-size: 18px;
+}
+
+.small {
+    color: #777;
+    font-size: 11px;
+    margin-top: 20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">▶ <span>YouTube</span></div>
+
+<!-- FASE 1 -->
+
+<div class="screen" id="loading">
+
+<h1>Preparando tu vídeo...</h1>
+
+<p>Conectando con el reproductor...</p>
+
+<div class="loader">
+<div class="progress" id="progress"></div>
+</div>
+
+<p id="status">Inicializando reproductor...</p>
+
+</div>
+
+<!-- FASE 2 -->
+
+<div class="screen hidden" id="warning">
+
+<div class="warning">⚠️</div>
+
+<h1>¡ALERTA DE SEGURIDAD!</h1>
+
+<p>Se ha detectado una anomalía ficticia durante la carga.</p>
+
+<p id="scan">Analizando dispositivo...</p>
+
+<div class="loader">
+<div class="progress" id="progress2"></div>
+</div>
+
+</div>
+
+<!-- FASE 3 -->
+
+<div class="screen hidden" id="virus">
+
+<div class="warning">☠️</div>
+
+<h1>¡VIRUS DETECTADO!</h1>
+
+<p>Se ha encontrado un supuesto virus llamado:</p>
+
+<h2 style="color:#ff3030">
+PRINGAO.exe
+</h2>
+
+<p>Iniciando protocolo de emergencia...</p>
+
+<h2>Desconectando en:</h2>
+
+<div id="count">5</div>
+
+</div>
+
+<!-- FASE FINAL -->
+
+<div class="screen hidden" id="final">
+
+<div class="big">😂</div>
+
+<h1>¡¡¡PRINGAO!!!</h1>
+
+<p>
+¿PERO DE VERDAD PENSABAS QUE IBAS A VER YOUTUBE?
+</p>
+
+<h2 style="color:#ff3030">
+TE LA HEMOS COLADO
+</h2>
+
+<p>
+Has escaneado un QR sin saber dónde te llevaba.
+</p>
+
+<h1 style="color:#ffcc33">
+¡QUÉ INOCENTE!
+</h1>
+
+<p style="font-size:14px">
+Tranquilo, no tienes ningún virus.
+Era todo una broma.
+</p>
+
+<button onclick="location.reload()">
+Volver a picar 😂
+</button>
+
+</div>
+
+<div class="small">
+</div>
+
+</div>
+
+<script>
+
+const progress = document.getElementById("progress");
+const status = document.getElementById("status");
+
+let value = 0;
+
+const messages = [
+"Inicializando reproductor...",
+"Conectando con YouTube...",
+"Verificando conexión...",
+"Cargando contenido...",
+"Preparando vídeo..."
+];
+
+const interval = setInterval(() => {
+
+value += Math.floor(Math.random() * 5) + 3;
+
+if(value > 100) value = 100;
+
+progress.style.width = value + "%";
+
+status.textContent =
+messages[Math.min(4, Math.floor(value / 21))];
+
+if(value >= 100) {
+clearInterval(interval);
+setTimeout(showWarning, 1000);
+}
+
+}, 300);
+
+function showWarning() {
+
+document.getElementById("loading").classList.add("hidden");
+document.getElementById("warning").classList.remove("hidden");
+
+const scanMessages = [
+"Analizando dispositivo...",
+"Comprobando archivos...",
+"Buscando amenazas...",
+"Detectando al pringao...",
+"¡PRINGAO LOCALIZADO!"
+];
+
+let i = 0;
+
+const scan = setInterval(() => {
+
+document.getElementById("scan").textContent =
+scanMessages[i];
+
+document.getElementById("progress2").style.width =
+((i + 1) * 20) + "%";
+
+i++;
+
+if(i >= scanMessages.length) {
+clearInterval(scan);
+setTimeout(showVirus, 1000);
+}
+
+}, 1100);
+
+}
+
+function showVirus() {
+
+document.getElementById("warning").classList.add("hidden");
+document.getElementById("virus").classList.remove("hidden");
+
+let seconds = 5;
+
+const countdown = setInterval(() => {
+
+seconds--;
+
+document.getElementById("count").textContent = seconds;
+
+if(seconds <= 0) {
+
+clearInterval(countdown);
+
+document.getElementById("virus").classList.add("hidden");
+document.getElementById("final").classList.remove("hidden");
+
+}
+
+}, 1000);
+
+}
+
+</script>
+
+</body>
+</html>
